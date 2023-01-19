@@ -3,8 +3,25 @@ import Chart from "chart.js/auto";
 import { onMounted } from "vue";
 import * as Utils from "./Utils";
 onMounted(() => {
+  const horizontalDottedLine = {
+    id: "horizontalDottedLine",
+    beforeDatasetsDraw(chart, args, options) {
+      const {
+        ctx,
+        chartArea: { top, right, bottom, left, width, height },
+        scales: { x, y },
+      } = chart;
+      ctx.save();
+
+      ctx.strokeStyle = "grey";
+      ctx.setLineDash([10, 5]);
+      ctx.strokeRect(0, y.getPixelForValue(2.5), width + 100, 0);
+    },
+  };
+
   let chart = new Chart(document.getElementById("myChart"), {
     type: "bar",
+
     data: {
       labels: [
         "CURRENT MO.",
@@ -17,7 +34,6 @@ onMounted(() => {
       datasets: [
         {
           label: "CERTAIN",
-
           backgroundColor: [
             "#77b9e5",
             "#77b9e5",
@@ -25,6 +41,7 @@ onMounted(() => {
             "#77b9e5",
             "#77b9e5",
           ],
+          barPercentage: 0.5,
           data: [
             [7500000, 8100000],
             [7000000, 7500000],
@@ -42,6 +59,8 @@ onMounted(() => {
             "#e7c81c",
             "#e7c81c",
           ],
+          barPercentage: 0.5,
+
           data: [
             [8000000, 8700000],
             [7500000, 8700000],
@@ -51,6 +70,7 @@ onMounted(() => {
           ],
         },
         {
+          xAxisID: "A",
           label: "UNLIKELY",
           backgroundColor: [
             "#ee3f37",
@@ -59,6 +79,8 @@ onMounted(() => {
             "#ee3f37",
             "#ee3f37",
           ],
+          barPercentage: 0.5,
+
           data: [
             [8670000, 9000000],
             [8670000, 9400000],
@@ -69,13 +91,49 @@ onMounted(() => {
         },
       ],
     },
+
+    plugins: [horizontalDottedLine],
     options: {
       indexAxis: "y",
+      responsive: true,
       scales: {
-        x: {
+        A: {
+          position: "top",
+          grid: { display: false },
+          border: {
+            display: false,
+          },
           min: 6500000,
           max: 9500000,
-          offset: "true",
+          ticks: {
+            callback: (value) => {
+              let val = value - 6000000;
+              let values =
+                val.toString().length < 7
+                  ? "$0." + val.toFixed(2) / 100000 + "M"
+                  : "$" +
+                    val.toString().substring(0, 2).split("").join(".") +
+                    "M";
+
+              //   .toString()
+              //   .substring(0, 2)
+              //   .split("")
+              //   .join(".");
+              return values;
+            },
+          },
+        },
+        x: {
+          border: {
+            display: false,
+          },
+          grid: {
+            lineWidth: 1,
+            color: "black",
+          },
+          min: 6500000,
+          max: 9500000,
+
           ticks: {
             callback: (value) => {
               let val = value.toString().substring(0, 2).split("").join(".");
@@ -84,18 +142,25 @@ onMounted(() => {
           },
         },
         y: {
+          ticks: {
+            crossAlign: "far",
+          },
+          border: {
+            display: false,
+          },
+          grid: {
+            borderWidth: 0,
+            lineWidth: 0,
+          },
           stacked: true,
-          beginAtZero: true,
         },
       },
       elements: {
         bar: {
-          borderWidth: { top: 10, bottom: 10 },
           borderColor: "white",
           hoverBorderColor: "white",
         },
       },
-      responsive: true,
       plugins: {
         legend: {
           display: false,
@@ -183,7 +248,7 @@ button {
 }
 
 #myChart {
-  width: 70rem;
-  height: 500px !important;
+  width: 65rem;
+  height: 400px !important;
 }
 </style>
