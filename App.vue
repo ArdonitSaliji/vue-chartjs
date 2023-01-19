@@ -4,10 +4,14 @@ import ChartComponent from "./components/ChartComponent.vue";
 </script>
 
 <template>
-  <div>
-    <div>
-      <canvas id="myChart"> </canvas>
-      <ChartComponent />
-    </div>
+  <div class="chart">
+    <ChartComponent />
   </div>
 </template>
+
+<style>
+.chart {
+  display: flex;
+  align-items: center;
+}
+</style>

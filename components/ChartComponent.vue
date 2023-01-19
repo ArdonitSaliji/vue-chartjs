@@ -1,31 +1,189 @@
 <script setup>
 import Chart from "chart.js/auto";
+import { onMounted } from "vue";
+import * as Utils from "./Utils";
+onMounted(() => {
+  let chart = new Chart(document.getElementById("myChart"), {
+    type: "bar",
+    data: {
+      labels: [
+        "CURRENT MO.",
+        "NEXT MO.",
+        "FOLLOWING MO.",
+        "CURRENT Q",
+        "NEXT Q",
+      ],
 
-const ctx = document.getElementById("myChart");
+      datasets: [
+        {
+          label: "CERTAIN",
 
-new Chart(ctx, {
-  type: "bar",
-  data: {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1,
+          backgroundColor: [
+            "#77b9e5",
+            "#77b9e5",
+            "#77b9e5",
+            "#77b9e5",
+            "#77b9e5",
+          ],
+          data: [
+            [7500000, 8100000],
+            [7000000, 7500000],
+            [7200000, 7800000],
+            [6800000, 7600000],
+            [7000000, 7500000],
+          ],
+        },
+        {
+          label: "EXPECTED",
+          backgroundColor: [
+            "#e7c81c",
+            "#e7c81c",
+            "#e7c81c",
+            "#e7c81c",
+            "#e7c81c",
+          ],
+          data: [
+            [8000000, 8700000],
+            [7500000, 8700000],
+            [7800000, 8700000],
+            [7600000, 8400000],
+            [7500000, 8200000],
+          ],
+        },
+        {
+          label: "UNLIKELY",
+          backgroundColor: [
+            "#ee3f37",
+            "#ee3f37",
+            "#ee3f37",
+            "#ee3f37",
+            "#ee3f37",
+          ],
+          data: [
+            [8670000, 9000000],
+            [8670000, 9400000],
+            [8670000, 9200000],
+            [8400000, 9000000],
+            [8200000, 9000000],
+          ],
+        },
+      ],
+    },
+    options: {
+      indexAxis: "y",
+      scales: {
+        x: {
+          min: 6500000,
+          max: 9500000,
+          offset: "true",
+          ticks: {
+            callback: (value) => {
+              let val = value.toString().substring(0, 2).split("").join(".");
+              return "$" + val + "M";
+            },
+          },
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+        },
       },
-    ],
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true,
+      elements: {
+        bar: {
+          borderWidth: { top: 10, bottom: 10 },
+          borderColor: "white",
+          hoverBorderColor: "white",
+        },
+      },
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+
+        tooltip: { enabled: false },
       },
     },
-  },
+  });
+  return function toggleData(value) {
+    const visibilityData = chart.isDatasetVisible(value);
+    if (visibilityData === true) {
+      chart.hide(value);
+      if ((visibilityData = false)) {
+        chart.show(value);
+      }
+    }
+  };
 });
 </script>
 <template>
   <div>
-    <canvas id="myChart"></canvas>
+    <!-- <div class="title"></div> -->
+    <div class="buttons">
+      <h2>Where are we going to land?</h2>
+      <button
+        @click="toggleData(0)"
+        class="certain"
+        style="background-color: #77b9e5"
+      >
+        CERTAIN
+      </button>
+      <button
+        @click="toggleData(1)"
+        class="expected"
+        style="background-color: #e7c81c"
+      >
+        EXPECTED
+      </button>
+      <button
+        @click="toggleData(2)"
+        class="unlikely"
+        style="background-color: #ee3f37"
+      >
+        UNLIKELY
+      </button>
+    </div>
+    <div class="container">
+      <canvas id="myChart"></canvas>
+    </div>
   </div>
 </template>
+
+<style>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+button {
+  margin: 0 0.3rem 0.7rem 0.3rem;
+  font-size: 12px;
+  border: none;
+  outline: none;
+  padding: 1px 15px;
+  height: 1.1rem;
+  border-radius: 10px;
+}
+
+.certain {
+  color: white;
+  margin-left: 1rem;
+}
+.unlikely {
+  color: white;
+}
+
+#myChart {
+  width: 70rem;
+  height: 500px !important;
+}
+</style>
