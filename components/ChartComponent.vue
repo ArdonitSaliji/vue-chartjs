@@ -1,10 +1,10 @@
 <script setup>
-import Chart from "chart.js/auto";
-import { onMounted } from "vue";
-import * as Utils from "./Utils";
+import Chart from 'chart.js/auto';
+import { onMounted } from 'vue';
+import * as Utils from './Utils';
 onMounted(() => {
   const horizontalDottedLine = {
-    id: "horizontalDottedLine",
+    id: 'horizontalDottedLine',
     beforeDatasetsDraw(chart, args, options) {
       const {
         ctx,
@@ -13,34 +13,22 @@ onMounted(() => {
       } = chart;
       ctx.save();
 
-      ctx.strokeStyle = "grey";
+      ctx.strokeStyle = 'grey';
       ctx.setLineDash([10, 5]);
       ctx.strokeRect(0, y.getPixelForValue(2.5), width + 100, 0);
     },
   };
 
-  let chart = new Chart(document.getElementById("myChart"), {
-    type: "bar",
+  let chart = new Chart(document.getElementById('myChart'), {
+    type: 'bar',
 
     data: {
-      labels: [
-        "CURRENT MO.",
-        "NEXT MO.",
-        "FOLLOWING MO.",
-        "CURRENT Q",
-        "NEXT Q",
-      ],
+      labels: ['CURRENT MO.', 'NEXT MO.', 'FOLLOWING MO.', 'CURRENT Q', 'NEXT Q'],
 
       datasets: [
         {
-          label: "CERTAIN",
-          backgroundColor: [
-            "#77b9e5",
-            "#77b9e5",
-            "#77b9e5",
-            "#77b9e5",
-            "#77b9e5",
-          ],
+          label: 'CERTAIN',
+          backgroundColor: ['#77b9e5', '#77b9e5', '#77b9e5', '#77b9e5', '#77b9e5'],
           barPercentage: 0.5,
           data: [
             [7500000, 8100000],
@@ -51,14 +39,8 @@ onMounted(() => {
           ],
         },
         {
-          label: "EXPECTED",
-          backgroundColor: [
-            "#e7c81c",
-            "#e7c81c",
-            "#e7c81c",
-            "#e7c81c",
-            "#e7c81c",
-          ],
+          label: 'EXPECTED',
+          backgroundColor: ['#e7c81c', '#e7c81c', '#e7c81c', '#e7c81c', '#e7c81c'],
           barPercentage: 0.5,
 
           data: [
@@ -70,15 +52,9 @@ onMounted(() => {
           ],
         },
         {
-          xAxisID: "A",
-          label: "UNLIKELY",
-          backgroundColor: [
-            "#ee3f37",
-            "#ee3f37",
-            "#ee3f37",
-            "#ee3f37",
-            "#ee3f37",
-          ],
+          xAxisID: 'A',
+          label: 'UNLIKELY',
+          backgroundColor: ['#ee3f37', '#ee3f37', '#ee3f37', '#ee3f37', '#ee3f37'],
           barPercentage: 0.5,
 
           data: [
@@ -94,11 +70,11 @@ onMounted(() => {
 
     plugins: [horizontalDottedLine],
     options: {
-      indexAxis: "y",
+      indexAxis: 'y',
       responsive: true,
       scales: {
         A: {
-          position: "top",
+          position: 'top',
           grid: { display: false },
           border: {
             display: false,
@@ -110,15 +86,9 @@ onMounted(() => {
               let val = value - 6000000;
               let values =
                 val.toString().length < 7
-                  ? "$0." + val.toFixed(2) / 100000 + "M"
-                  : "$" +
-                    val.toString().substring(0, 2).split("").join(".") +
-                    "M";
+                  ? '$0.' + val.toFixed(2) / 100000 + 'M'
+                  : '$' + val.toString().substring(0, 2).split('').join('.') + 'M';
 
-              //   .toString()
-              //   .substring(0, 2)
-              //   .split("")
-              //   .join(".");
               return values;
             },
           },
@@ -129,21 +99,21 @@ onMounted(() => {
           },
           grid: {
             lineWidth: 1,
-            color: "black",
+            color: 'black',
           },
           min: 6500000,
           max: 9500000,
 
           ticks: {
             callback: (value) => {
-              let val = value.toString().substring(0, 2).split("").join(".");
-              return "$" + val + "M";
+              let val = value.toString().substring(0, 2).split('').join('.');
+              return '$' + val + 'M';
             },
           },
         },
         y: {
           ticks: {
-            crossAlign: "far",
+            crossAlign: 'far',
           },
           border: {
             display: false,
@@ -157,8 +127,8 @@ onMounted(() => {
       },
       elements: {
         bar: {
-          borderColor: "white",
-          hoverBorderColor: "white",
+          borderColor: 'white',
+          hoverBorderColor: 'white',
         },
       },
       plugins: {
@@ -174,7 +144,7 @@ onMounted(() => {
     const visibilityData = chart.isDatasetVisible(value);
     if (visibilityData === true) {
       chart.hide(value);
-      if ((visibilityData = false)) {
+      if (visibilityData === false) {
         chart.show(value);
       }
     }
@@ -186,25 +156,13 @@ onMounted(() => {
     <!-- <div class="title"></div> -->
     <div class="buttons">
       <h2>Where are we going to land?</h2>
-      <button
-        @click="toggleData(0)"
-        class="certain"
-        style="background-color: #77b9e5"
-      >
+      <button @click="toggleData(0)" class="certain" style="background-color: #77b9e5">
         CERTAIN
       </button>
-      <button
-        @click="toggleData(1)"
-        class="expected"
-        style="background-color: #e7c81c"
-      >
+      <button @click="toggleData(1)" class="expected" style="background-color: #e7c81c">
         EXPECTED
       </button>
-      <button
-        @click="toggleData(2)"
-        class="unlikely"
-        style="background-color: #ee3f37"
-      >
+      <button @click="toggleData(2)" class="unlikely" style="background-color: #ee3f37">
         UNLIKELY
       </button>
     </div>

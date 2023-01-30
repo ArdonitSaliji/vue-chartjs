@@ -1,6 +1,12 @@
-<script setup>
-// import { ref } from "vue";
-import ChartComponent from "./components/ChartComponent.vue";
+<script>
+import ChartComponent from './components/ChartComponent.vue';
+
+export default {
+  name: 'App',
+  components: {
+    ChartComponent,
+  },
+};
 </script>
 
 <template>
